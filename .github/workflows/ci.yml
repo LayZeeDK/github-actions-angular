@@ -63,7 +63,7 @@ jobs:
         run: pnpm install
 
       - name: Test
-        run: pnpm test
+        run: pnpm test -- --watch=false
 
   deploy:
     name: Deploy Azure WebApp
