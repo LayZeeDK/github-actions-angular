@@ -1,0 +1,89 @@
+name: CI workflow
+
+env:
+  azure-webapp-name: my-web-app
+  node-version: 14.x
+
+on:
+  pull_request:
+    branches:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    branches:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.node-version }}
+      - name: Install PNPM
+        run: npm install --global pnpm
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build app
+        run: pnpm build
+
+      - name: Upload WebApp package
+        uses: actions/upload-artifact@v2
+        with:
+          name: angular-app
+          path: dist/github-actions-angular
+          if-no-files-found: error
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.node-version }}
+      - name: Install PNPM
+        run: npm install --global pnpm
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Test
+        run: pnpm test
+
+  deploy:
+    name: Deploy Azure WebApp
+    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || github.event_name == 'push') }}
+    needs: build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Download WebApp package
+        uses: actions/download-artifact@v2
+        with:
+          name: angular-app
+          path: ./angular-app/
+
+      - name: Deploy Azure WebApp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.azure-webapp-name }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./angular-app/
