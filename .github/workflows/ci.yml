@@ -28,13 +28,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ env.node-version }}
-      - name: Install PNPM
-        run: npm install --global pnpm
       - name: Install dependencies
-        run: pnpm install
+        run: yarn install
 
       - name: Build app
-        run: pnpm build
+        run: yarn build
 
       - name: Upload WebApp package
         uses: actions/upload-artifact@v2
@@ -57,13 +55,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ env.node-version }}
-      - name: Install PNPM
-        run: npm install --global pnpm
       - name: Install dependencies
-        run: pnpm install
+        run: yarn install
 
       - name: Test
-        run: pnpm test -- --watch=false
+        run: yarn test --watch=false
 
   deploy:
     name: Deploy Azure WebApp
