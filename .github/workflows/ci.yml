@@ -81,7 +81,7 @@ jobs:
         run: yarn install
 
       - name: Test
-        run: yarn test --watch=false
+        run: yarn ci:test
 
   deploy:
     name: Deploy Azure WebApp
