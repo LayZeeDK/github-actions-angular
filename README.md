@@ -5,5 +5,5 @@ Angular app generated using the Angular CLI.
 # Generate workspace
 
 ```powershell
-ng new github-actions-angular --package-manager=pnpm --no-routing --style=css
+ng new github-actions-angular --package-manager=yarn --no-routing --style=css
 ```
