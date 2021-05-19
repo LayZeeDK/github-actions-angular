@@ -1,5 +1,4 @@
-// Karma configuration file, see link for more information
-// https://karma-runner.github.io/1.0/config/configuration-file.html
+const path = require("path");
 
 module.exports = function (config) {
   config.set({
@@ -25,16 +24,24 @@ module.exports = function (config) {
       suppressAll: true, // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require("path").join(__dirname, "./coverage/github-actions-angular"),
+      dir: path.join(
+        __dirname,
+        "reports",
+        "coverage",
+        "angular-github-actions"
+      ),
       subdir: ".",
-      reporters: [{ type: "html" }, { type: "text-summary" }],
+      reporters: [
+        { type: "text-summary" },
+        { type: "lcovonly", subdir: ".", file: "lcov.info" },
+      ],
     },
     reporters: ["progress", "kjhtml"],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ["ChromeHeadless"],
+    browsers: ["Chrome"],
     singleRun: false,
     restartOnFileChange: true,
   });
