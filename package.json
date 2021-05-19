@@ -2,6 +2,7 @@
   "name": "github-actions-angular",
   "version": "0.0.0",
   "scripts": {
+    "postinstall": "ngcc --first-only --properties es2015 module fesm2015 esm2015 browser main --create-ivy-entry-points --use-program-dependencies",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
