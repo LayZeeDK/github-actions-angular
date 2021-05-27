@@ -1,0 +1,9 @@
+<article
+  *ngFor="let widget of widgets$ | async"
+  [style.height]="100 * widget.rows"
+  [style.width]="100 * widget.columns"
+  [style.top]="100 * widget.top"
+  [style.left]="100 * widget.left"
+>
+  {{ widget.name }}
+</article>
