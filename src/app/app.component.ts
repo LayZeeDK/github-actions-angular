@@ -12,6 +12,6 @@ export class AppComponent {
    *
    */
   constructor() {
-    console.log('hello ci');
+    console.log('hello ci pull request');
   }
 }
