@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'github-actions-angular';
+
+  /**
+   *
+   */
+  constructor() {
+    console.log('hello ci');
+  }
 }
