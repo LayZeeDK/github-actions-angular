@@ -2,12 +2,13 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { AppComponent } from './app.component';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [AppComponent],
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, DashboardModule],
     });
   });
 
@@ -27,8 +28,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain(
-      'github-actions-angular app is running!'
-    );
+    expect(compiled.querySelector('app-dashboard').textContent).toBe('');
   });
 });
