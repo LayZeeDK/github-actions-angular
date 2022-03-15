@@ -3,6 +3,7 @@ name: CD workflow
 env:
   azure-webapp-name: my-web-app
   bundle-name: angular-app
+  NODE_OPTIONS: --max-old-space-size=6144
 
 on:
   push:
