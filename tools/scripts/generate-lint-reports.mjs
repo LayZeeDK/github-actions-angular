@@ -52,5 +52,9 @@ async function sanitizeLintReports() {
   }
 }
 
-generateLintReports();
+try {
+  generateLintReports();
+} catch {
+  // Don't exit with non-zero code because of failing lint checks.
+}
 sanitizeLintReports();

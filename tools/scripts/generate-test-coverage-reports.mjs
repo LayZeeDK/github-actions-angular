@@ -46,5 +46,9 @@ function runTestCoverageTargets() {
     });
 }
 
-runTestCoverageTargets();
+try {
+  runTestCoverageTargets();
+} catch {
+  // Don't exit with non-zero code because of failing tests.
+}
 flattenCoverageReports();
