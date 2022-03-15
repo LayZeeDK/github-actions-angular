@@ -3,37 +3,36 @@ import { mkdirSync, readFileSync, writeFileSync } from 'fs';
 import * as path from 'path';
 import readdirp from 'readdirp';
 
+import { targetsWithBuilder } from './util/targets-with-builder.mjs';
 import { validateProjectName } from './util/validate-project-name.mjs';
 
 function generateLintReports() {
   const workspace = JSON.parse(readFileSync("./angular.json").toString());
 
-  const hasLint = (project) => project.architect.lint;
-
   mkdirSync("reports/lint", {
     recursive: true,
   });
 
-  Object.entries(workspace.projects)
-    .filter(([_projectName, project]) => hasLint(project))
-    .map(([projectName]) => projectName)
-    .forEach((projectName) => {
-      validateProjectName(projectName);
-      const lintCommand = `ng lint ${projectName} --silent --format=json --force > reports/lint/${projectName}.json`;
+  targetsWithBuilder(
+    "@angular-eslint/builder:lint",
+    workspace.projects
+  ).forEach(([projectName, targetName]) => {
+    validateProjectName(projectName);
+    const lintCommand = `ng run ${projectName}:${targetName} --silent --format=json --force > reports/lint/${projectName}-${targetName}.json`;
 
-      console.log(`> ${lintCommand}`);
-      execSync(lintCommand, {
-        stdio: "inherit",
-      });
+    console.log(`> ${lintCommand}`);
+    execSync(lintCommand, {
+      stdio: "inherit",
     });
+  });
 }
 
-function normalizePath(path, separator = path.sep) {
-  return path.replace(/[\\\/]/g, separator);
+function normalizePath(thePath, separator = thePath.sep) {
+  return thePath.replace(/[\\\/]/g, separator);
 }
 
 async function sanitizeLintReports() {
-  const normalizedRootPath = normalizePath(process.cwd() + path.sep, path.sep);
+  const normalizedRootPath = normalizePath(process.cwd() + path.sep);
   const lintReportsPath = path.join("reports", "lint");
 
   for await (const { path: fileName } of readdirp(lintReportsPath)) {
@@ -53,7 +52,9 @@ async function sanitizeLintReports() {
   }
 }
 
-(async () => {
+try {
   generateLintReports();
-  await sanitizeLintReports();
-})();
+} catch {
+  // Don't exit with non-zero code because of failing lint checks.
+}
+sanitizeLintReports();

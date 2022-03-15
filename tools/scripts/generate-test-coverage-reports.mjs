@@ -46,7 +46,9 @@ function runTestCoverageTargets() {
     });
 }
 
-(async () => {
+try {
   runTestCoverageTargets();
-  await flattenCoverageReports();
-})();
+} catch {
+  // Don't exit with non-zero code because of failing tests.
+}
+flattenCoverageReports();

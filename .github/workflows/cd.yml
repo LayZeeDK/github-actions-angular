@@ -3,7 +3,7 @@ name: CD workflow
 env:
   azure-webapp-name: my-web-app
   bundle-name: angular-app
-  node-version: 14.x
+  NODE_OPTIONS: --max-old-space-size=6144
 
 on:
   push:
@@ -24,10 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Node.js ${{ env.node-version }}
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ env.node-version }}
+          node-version-file: .nvmrc
           cache: yarn
       - name: Install dependencies
         run: yarn install
@@ -45,10 +45,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Node.js ${{ env.node-version }}
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ env.node-version }}
+          node-version-file: .nvmrc
           cache: yarn
       - name: Install dependencies
         run: yarn install
@@ -73,11 +73,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Node.js ${{ env.node-version }}
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ env.node-version }}
-          cahce: yarn
+          node-version-file: .nvmrc
+          cache: yarn
       - name: Install dependencies
         run: yarn install
 
@@ -86,7 +86,7 @@ jobs:
 
   deploy:
     name: Deploy Azure WebApp (merge)
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     needs: build
     runs-on: ubuntu-latest
     defaults:
@@ -121,10 +121,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Node.js ${{ env.node-version }}
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ env.node-version }}
+          node-version-file: .nvmrc
           cache: yarn
       - name: Install dependencies
         run: yarn install

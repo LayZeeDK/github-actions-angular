@@ -54,5 +54,11 @@
     "readdirp": "^3.6.0",
     "replace-in-file": "^6.2.0",
     "typescript": "~4.2.3"
+  },
+  "engines": {
+    "node": "14.19.0"
+  },
+  "volta": {
+    "node": "14.19.0"
   }
 }
