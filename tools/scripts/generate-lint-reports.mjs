@@ -27,8 +27,8 @@ function generateLintReports() {
   });
 }
 
-function normalizePath(path, separator = path.sep) {
-  return path.replace(/[\\\/]/g, separator);
+function normalizePath(thePath, separator = thePath.sep) {
+  return thePath.replace(/[\\\/]/g, separator);
 }
 
 async function sanitizeLintReports() {
