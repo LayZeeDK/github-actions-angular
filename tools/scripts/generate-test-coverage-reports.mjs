@@ -37,7 +37,7 @@ function runTestCoverageTargets() {
     .map(([projectName]) => projectName)
     .forEach((projectName) => {
       validateProjectName(projectName);
-      const coverageCommand = `yarn ng test ${projectName} --configuration=coverage`;
+      const coverageCommand = `ng test ${projectName} --configuration=coverage`;
 
       console.log(`> ${coverageCommand}`);
       execSync(coverageCommand, {
@@ -46,7 +46,5 @@ function runTestCoverageTargets() {
     });
 }
 
-(async () => {
-  runTestCoverageTargets();
-  await flattenCoverageReports();
-})();
+runTestCoverageTargets();
+flattenCoverageReports();

@@ -18,7 +18,7 @@ function generateLintReports() {
     workspace.projects
   ).forEach(([projectName, targetName]) => {
     validateProjectName(projectName);
-    const lintCommand = `yarn ng run ${projectName}:${targetName} --silent --format=json --force > reports/lint/${projectName}-${targetName}.json`;
+    const lintCommand = `ng run ${projectName}:${targetName} --silent --format=json --force > reports/lint/${projectName}-${targetName}.json`;
 
     console.log(`> ${lintCommand}`);
     execSync(lintCommand, {
@@ -52,7 +52,5 @@ async function sanitizeLintReports() {
   }
 }
 
-(async () => {
-  generateLintReports();
-  await sanitizeLintReports();
-})();
+generateLintReports();
+sanitizeLintReports();
