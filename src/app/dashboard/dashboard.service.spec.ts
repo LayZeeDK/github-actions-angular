@@ -1,22 +1,28 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { DashboardService } from './dashboard.service';
 
 describe('DashboardService', () => {
-  let service: DashboardService;
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
-    service = TestBed.inject(DashboardService);
+    client = TestBed.inject(DashboardService);
+    server = TestBed.inject(HttpTestingController);
   });
 
-  it('should be created', async () => {
-    const widgets = await service.getWidgets().toPromise();
+  let client: DashboardService;
+  let server: HttpTestingController;
 
-    expect(widgets).toEqual([
+  it('should be created', async () => {
+    const whenWidgets = client.getWidgets().toPromise();
+    const response = server.expectOne((request) =>
+      request.url.endsWith('widgets')
+    );
+    response.flush([]);
+
+    expect(await whenWidgets).toEqual([
       {
         columns: 1,
         left: 0,
